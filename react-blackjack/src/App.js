@@ -1,7 +1,9 @@
 import logo from './logo.svg';
 import './App.css';
+import './assets/css/react-blackjack.css'
 import { Container, Row, Col, Button } from 'react-bootstrap';
 import data from './assets/cards.json'
+import Card from './components/Card'
 
 
 function App() {
@@ -20,6 +22,7 @@ function App() {
         >
           Learn React
         </a>
+        <Card />
         <Container>
           { JSON.stringify(data) }
         </Container>
