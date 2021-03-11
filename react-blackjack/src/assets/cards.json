@@ -1,0 +1,65 @@
+[
+	{"2_H":{ "name": "2", "value": [2], "suit": "heart" }},
+	{"2_D":{ "name": "2", "value": [2], "suit": "diamond" }},
+	{"2_S":{ "name": "2", "value": [2], "suit": "spade" }},
+	{"2_C":{ "name": "2", "value": [2], "suit": "club" }},
+	{"3_H":{ "name": "3", "value": [3], "suit": "heart" }},
+	{"3_D":{ "name": "3", "value": [3], "suit": "diamond" }},
+	{"3_S":{ "name": "3", "value": [3], "suit": "spade" }},
+	{"3_C":{ "name": "3", "value": [3], "suit": "club" }},
+
+	{"4_H":{ "name": "4", "value": [4], "suit": "heart" }},
+	{"4_D":{ "name": "4", "value": [4], "suit": "diamond" }},
+	{"4_S":{ "name": "4", "value": [4], "suit": "spade" }},
+	{"4_C":{ "name": "4", "value": [4], "suit": "club" }},
+
+	{"5_H":{ "name": "5", "value": [5], "suit": "heart" }},
+	{"5_D":{ "name": "5", "value": [5], "suit": "diamond" }},
+	{"5_S":{ "name": "5", "value": [5], "suit": "spade" }},
+	{"5_C":{ "name": "5", "value": [5], "suit": "club" }},
+
+	{"6_H":{ "name": "6", "value": [6], "suit": "heart" }},
+	{"6_D":{ "name": "6", "value": [6], "suit": "diamond" }},
+	{"6_S":{ "name": "6", "value": [6], "suit": "spade" }},
+	{"6_C":{ "name": "6", "value": [6], "suit": "club" }},
+
+	{"7_H":{ "name": "7", "value": [7], "suit": "heart" }},
+	{"7_D":{ "name": "7", "value": [7], "suit": "diamond" }},
+	{"7_S":{ "name": "7", "value": [7], "suit": "spade" }},
+	{"7_C":{ "name": "7", "value": [7], "suit": "club" }},
+
+	{"8_H":{ "name": "8", "value": [8], "suit": "heart" }},
+	{"8_D":{ "name": "8", "value": [8], "suit": "diamond" }},
+	{"8_S":{ "name": "8", "value": [8], "suit": "spade" }},
+	{"8_C":{ "name": "8", "value": [8], "suit": "club" }},
+
+	{"9_H":{ "name": "9", "value": [9], "suit": "heart" }},
+	{"9_D":{ "name": "9", "value": [9], "suit": "diamond" }},
+	{"9_S":{ "name": "9", "value": [9], "suit": "spade" }},
+	{"9_C":{ "name": "9", "value": [9], "suit": "club" }},
+
+	{"10_H":{ "name": "10", "value": [10], "suit": "heart" }},
+	{"10_D":{ "name": "10", "value": [10], "suit": "diamond" }},
+	{"10_S":{ "name": "10", "value": [10], "suit": "spade" }},
+	{"10_C":{ "name": "10", "value": [10], "suit": "club" }},
+
+	{"J_H":{ "name": "Jack", "value": [10], "suit": "heart" }},
+	{"J_D":{ "name": "Jack", "value": [10], "suit": "diamond" }},
+	{"J_S":{ "name": "Jack", "value": [10], "suit": "spade" }},
+	{"J_C":{ "name": "Jack", "value": [10], "suit": "club" }},
+
+	{"Q_H":{ "name": "Queen", "value": [10], "suit": "heart" }},
+	{"Q_D":{ "name": "Queen", "value": [10], "suit": "diamond" }},
+	{"Q_S":{ "name": "Queen", "value": [10], "suit": "spade" }},
+	{"Q_C":{ "name": "Queen", "value": [10], "suit": "club" }},
+
+	{"K_H":{ "name": "King", "value": [10], "suit": "heart" }},
+	{"K_D":{ "name": "King", "value": [10], "suit": "diamond" }},
+	{"K_S":{ "name": "King", "value": [10], "suit": "spade" }},
+	{"K_C":{ "name": "King", "value": [10], "suit": "club" }},
+
+	{"A_H":{ "name": "Ace", "value": [1,11], "suit": "heart" }},
+	{"A_D":{ "name": "Ace", "value": [1,11], "suit": "diamond" }},
+	{"A_S":{ "name": "Ace", "value": [1,11], "suit": "spade" }},
+	{"A_C":{ "name": "Ace", "value": [1,11], "suit": "club" }}
+]

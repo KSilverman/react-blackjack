@@ -1,5 +1,8 @@
 import logo from './logo.svg';
 import './App.css';
+import { Container, Row, Col, Button } from 'react-bootstrap';
+import data from './assets/cards.json'
+
 
 function App() {
   return (
@@ -17,6 +20,9 @@ function App() {
         >
           Learn React
         </a>
+        <Container>
+          { JSON.stringify(data) }
+        </Container>
       </header>
     </div>
   );
