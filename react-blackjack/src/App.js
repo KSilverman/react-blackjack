@@ -7,6 +7,19 @@ import Card from './components/Card'
 
 
 function App() {
+
+  // gets one card object from card json array given an index
+  // output example --> {"2H":{"name":"2","value"=[2],"suit"="Hearts"}}
+  function getCardData(json_data, index) {
+    var cardData = json_data[index]
+    return cardData; 
+  }
+
+  //populates 0-51 in a random order into an array
+  function getRandomCardList() {
+    return Array.from({length: 52}, () => Math.floor(Math.random() * 52));
+  }
+
   return (
     <div className="App">
       <header className="App-header">
@@ -22,9 +35,12 @@ function App() {
         >
           Learn React
         </a>
-        <Card />
         <Container>
-          { JSON.stringify(data) }
+          {
+             getRandomCardList().map(randomNum => (
+              <Card card_data={getCardData(data, randomNum)} />
+            ))
+          }
         </Container>
       </header>
     </div>
