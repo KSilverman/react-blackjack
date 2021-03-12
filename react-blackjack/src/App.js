@@ -15,10 +15,12 @@ function App() {
     return cardData; 
   }
 
-  //populates 0-51 in a random order into an array
-  function getRandomCardList() {
-    return Array.from({length: 52}, () => Math.floor(Math.random() * 52));
-  }
+  //populates 0-N in a random order into an array
+  function shuffle(len) {
+    var o = Array.from(Array(len).keys())
+    for(var j, x, i = o.length; i; j = parseInt(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
+    return o;
+  };
 
   return (
     <div className="App">
@@ -37,7 +39,7 @@ function App() {
         </a>
         <Container>
           {
-             getRandomCardList().map(randomNum => (
+             shuffle(52).map(randomNum => (
               <Card card_data={getCardData(data, randomNum)} />
             ))
           }
