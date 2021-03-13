@@ -36,6 +36,9 @@ class Card extends React.Component {
 				<Col>
 					<img src={getCardPic(this.props.card_info)} alt="" />
 				</Col>
+				<Col>
+					Cards remaining: {this.props.num}
+				</Col>
 			</Row>
 		);
 	};

@@ -17,12 +17,14 @@ function shuffle(len) {
     return o;
   };
 
+var cards = shuffle(52);
+
 class Deck extends React.Component {
 	constructor (props) {
 		super(props);
 		//set current state to random card json object
 		this.state = {
-			info: getCardData(data, shuffle(52)[0])
+			info: getCardData(data, cards[0])
 		}
 
 		//binding newcard function to the deck object itself
@@ -31,8 +33,9 @@ class Deck extends React.Component {
 
 	//sets the state of the new card to pass into Card component
 	newcard() {
+		
       this.setState(state => ({
-        info: getCardData(data, shuffle(52)[0])
+        info: getCardData(data, cards[0])
       }));
    }
 
@@ -47,7 +50,7 @@ class Deck extends React.Component {
 				</Col>
 			</Row>
          	{
-        		<Card card_info={this.state.info} />
+        		<Card card_info={this.state.info} num="5" />
         	}
         </Container>
 		);
