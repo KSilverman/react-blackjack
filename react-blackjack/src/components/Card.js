@@ -1,5 +1,5 @@
 import React from 'react'
-import {Container, Row, Col} from 'react-bootstrap';
+import {Container, Row, Col, Button} from 'react-bootstrap';
 import '../assets/css/react-blackjack.css';
 
 /*
@@ -16,8 +16,8 @@ function getCardDataFromKey(data, string) {
 }
 
 //imports image string for "2H"
-function getCardPic(data) {
-	return require('../assets/img/'+Object.keys(data)+'.svg')
+function getCardPic(json_data) {
+	return require('../assets/img/'+Object.keys(json_data)+'.svg')
 }
 
 class Card extends React.Component {
@@ -29,10 +29,10 @@ class Card extends React.Component {
 		return(
 			<Row className="outline">
 				<Col>
-					{ getCardDataFromKey(this.props.card_data, true) }
+					{ getCardDataFromKey(this.props.card_info, true) }
 				</Col>
 				<Col>
-					<img src={getCardPic(this.props.card_data)} alt="" />
+					<img src={getCardPic(this.props.card_info)} alt="" />
 				</Col>
 			</Row>
 		);
