@@ -32,9 +32,9 @@ class Deck extends React.Component {
 	}
 
 	//sets the state of the new card to pass into Card component
-	newcard() {
-		
-      this.setState(state => ({
+	newcard() { 
+		cards.shift()
+      	this.setState(state => ({
         info: getCardData(data, cards[0])
       }));
    }
@@ -50,7 +50,7 @@ class Deck extends React.Component {
 				</Col>
 			</Row>
          	{
-        		<Card card_info={this.state.info} num="5" />
+        		<Card card_info={this.state.info} num={cards.length} />
         	}
         </Container>
 		);
