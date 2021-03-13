@@ -4,11 +4,13 @@ import '../assets/css/react-blackjack.css';
 import data from '../assets/cards.json';
 import Card from '../components/Card';
 
+//Gets card json object from index of card json array
 function getCardData(json_data, index) {
     var cardData = json_data[index]
     return cardData; 
 }
 
+//Genrates random array from 0 to N
 function shuffle(len) {
     var o = Array.from(Array(len).keys())
     for(var j, x, i = o.length; i; j = parseInt(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
@@ -18,13 +20,16 @@ function shuffle(len) {
 class Deck extends React.Component {
 	constructor (props) {
 		super(props);
+		//set current state to random card json object
 		this.state = {
 			info: getCardData(data, shuffle(52)[0])
 		}
 
+		//binding newcard function to the deck object itself
 		this.newcard = this.newcard.bind(this)
 	}
 
+	//sets the state of the new card to pass into Card component
 	newcard() {
       this.setState(state => ({
         info: getCardData(data, shuffle(52)[0])

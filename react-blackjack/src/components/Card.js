@@ -3,9 +3,9 @@ import {Container, Row, Col, Button} from 'react-bootstrap';
 import '../assets/css/react-blackjack.css';
 
 /*
-Format example --> this.props.card_data = {"2H":{"name":"2","value"=[2],"suit"="Hearts"}}
-Object.keys(this.props.card_data) = "2H"
-this.props.card_data[Object.keys(card_data)] = {"name":"2","value"=[2],"suit"="Hearts"}
+Format example --> this.props.card_info = {"2H":{"name":"2","value"=[2],"suit"="Hearts"}}
+Object.keys(this.props.card_info) = "2H"
+this.props.card_info[Object.keys(card_info)] = {"name":"2","value"=[2],"suit"="Hearts"}
 */
 
 // From example, returns {"name":"2","value"=[2],"suit"="Hearts"}
@@ -29,7 +29,9 @@ class Card extends React.Component {
 		return(
 			<Row className="outline">
 				<Col>
-					{ getCardDataFromKey(this.props.card_info, true) }
+					{ 
+						getCardDataFromKey(this.props.card_info, true) 
+					}
 				</Col>
 				<Col>
 					<img src={getCardPic(this.props.card_info)} alt="" />
