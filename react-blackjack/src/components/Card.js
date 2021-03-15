@@ -1,45 +1,46 @@
 import React from 'react'
-import {Container, Row, Col, Button} from 'react-bootstrap';
+import {Row, Col} from 'react-bootstrap';
 import '../assets/css/react-blackjack.css';
+import cardHelper from '../assets/js/cardHelper'
 
-/*
-Format example --> this.props.card_info = {"2H":{"name":"2","value"=[2],"suit"="Hearts"}}
-Object.keys(this.props.card_info) = "2H"
-this.props.card_info[Object.keys(card_info)] = {"name":"2","value"=[2],"suit"="Hearts"}
-*/
-
-// From example, returns {"name":"2","value"=[2],"suit"="Hearts"}
-function getCardDataFromKey(data, string) {
-	var key = data[Object.keys(data)];
-	if(!string) { return key; }
-	return JSON.stringify(key);
-}
-
-//imports image string for "2H"
-function getCardPic(json_data) {
-	return require('../assets/img/'+Object.keys(json_data)+'.svg')
-}
-
+/** @class Card representing a playing card. */
 class Card extends React.Component {
+/**
+ * Creates an instance of Card.
+ *
+ * @author [Kyle Silverman](https://github.com/KSilverman)
+ * @author [Kalju Jake Nekvasil](https://github.com/knekvasil)
+ * @param {props} attributes defined by parent component.
+ */
 	constructor(props) {
 		super(props);
 	}
 
 	render() {
 		return(
-			<Row className="outline">
-				<Col>
-					{ 
-						getCardDataFromKey(this.props.card_info, true) 
-					}
-				</Col>
-				<Col>
-					<img src={getCardPic(this.props.card_info)} alt="" />
-				</Col>
-				<Col>
-					Cards remaining: {this.props.num}
-				</Col>
-			</Row>
+			<div>
+				<Row className="outline">
+					<Col>
+						{ 
+							cardHelper.getCardDataFromJSONObject(this.props.cardJSON, true) 
+						}
+					</Col>
+					<Col>
+						<img src={cardHelper.getCardSVG(this.props.cardJSON)} alt="" />
+					</Col>
+					<Col>
+						Cards remaining: {this.props.cardsLeft}
+					</Col>
+				</Row>
+				<Row>
+					<Col>
+						Running Count: {this.props.runningCount}
+					</Col>
+					<Col>
+						Cards Dealt: {JSON.stringify(this.props.dealtArray)}
+					</Col>
+				</Row>
+			</div>
 		);
 	};
 }
