@@ -8,7 +8,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <Deck cardArray={cardHelper.shuffle(52)}/>
+        <Deck cardArray={cardHelper.getShoe(6)}/>
       </header>
     </div>
   );

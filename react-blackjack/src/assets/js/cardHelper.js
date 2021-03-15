@@ -1,5 +1,31 @@
 const helpers = {
 
+
+	/**
+	* Returns randomized shoe made up of number of desired decks.
+	*
+	* @param {number} numberOfDecks - The amount of decks to add to shoe.
+	* @return {array} random array of Card indexes (0-51) * number of decks.
+	*/
+
+	getShoe: function (numberOfDecks) {
+		var shoeArray = []
+		for(let i = 0; i < numberOfDecks; i++){
+			var o = Array.from(Array(52).keys());
+			shoeArray = shoeArray.concat(o)
+		}
+
+		for(let i = shoeArray.length-1;i > 0; i--){
+  			const j= Math.floor(Math.random() * i)
+  			var holder = shoeArray[i]
+
+  			shoeArray[i] = shoeArray[j]
+  			shoeArray[j] = holder
+		}
+		return shoeArray
+	},
+
+
 	/**
 	* Returns array on unique numbers 0-N in random order.
 	*
