@@ -16,13 +16,14 @@ class Deck extends React.Component {
  */
 	constructor (props) {
 		super(props);
+		var cardArray = cardHelper.getShoe(this.props.numberOfDecks)
 		
 		//get the first number from the random shuffled array and get its corresponding JSON card object
-		var cardIndex = this.props.cardArray[0];
+		var cardIndex = cardArray[0];
 		var cardJSONObject = cardHelper.getCardJSONObject(allCardJSONData, cardIndex);
 
 		this.state = {
-			allCards: this.props.cardArray,
+			allCards: cardArray,
 			cardJSON: cardJSONObject,
 			cardsDealt: [cardHelper.getCardKey(cardJSONObject)],
 			runningCount: cardHelper.getCardRunningCountValue(cardJSONObject)
@@ -30,6 +31,7 @@ class Deck extends React.Component {
 
 		//binding newCard function to the deck object itself
 		this.newCard = this.newCard.bind(this)
+		this.resetCards = this.resetCards.bind(this)
 	}
 
 	//sets the state of the new card to pass into Card component
@@ -58,14 +60,35 @@ class Deck extends React.Component {
       	}
    }
 
+    resetCards() {
+    	var newCardArray = cardHelper.getShoe(this.props.numberOfDecks)
+
+    	//get the first number from the random shuffled array and get its corresponding JSON card object
+		var cardIndex = newCardArray[0];
+		var cardJSONObject = cardHelper.getCardJSONObject(allCardJSONData, cardIndex);
+
+    	this.setState(state => ({
+				allCards: newCardArray,
+				cardJSON: cardJSONObject,
+				cardsDealt: [cardHelper.getCardKey(cardJSONObject)],
+				runningCount: cardHelper.getCardRunningCountValue(cardJSONObject)
+	      	}));
+   		
+    }
+
 	render() {
 		return(
 			<Container fluid>
 			<Row>
 				<Col>
-					<Button onClick={this.newCard} variant="danger">
+					<Button onClick={this.newCard} variant="primary">
 						New Card
 					</Button>
+				</Col>
+				<Col>
+				 	<Button onClick={this.resetCards} variant="danger">
+				 		Reset Cards
+				 	</Button>
 				</Col>
 			</Row>
          	{
