@@ -3,6 +3,7 @@ import {Container, Row, Col, Button} from 'react-bootstrap';
 import '../assets/css/react-blackjack.css';
 import allCardJSONData from '../assets/cards.json';
 import Card from '../components/Card';
+import GameInfo from '../components/GameInfo';
 import cardHelper from '../assets/js/cardHelper'
 
 /** @class Deck representing a deck of playing cards. */
@@ -23,7 +24,6 @@ class Deck extends React.Component {
 		var cardJSONObject = cardHelper.getCardJSONObject(allCardJSONData, cardIndex);
 		var rCount = cardHelper.getCardRunningCountValue(cardJSONObject)
 		var tCount = rCount/(cardArray.length/52)
-
 
 		this.state = {
 			allCards: cardArray,
@@ -77,12 +77,12 @@ class Deck extends React.Component {
 		var tCount = rCount/(newCardArray.length/52)
 
     	this.setState(state => ({
-				allCards: newCardArray,
-				cardJSON: cardJSONObject,
-				cardsDealt: [cardHelper.getCardKey(cardJSONObject)],
-				runningCount: rCount,
-				trueCount: tCount
-	      	}));
+			allCards: newCardArray,
+			cardJSON: cardJSONObject,
+			cardsDealt: [cardHelper.getCardKey(cardJSONObject)],
+			runningCount: rCount,
+			trueCount: tCount
+	    }));
    		
     }
 
@@ -101,10 +101,16 @@ class Deck extends React.Component {
 				 	</Button>
 				</Col>
 			</Row>
+			<Row>
          	{
-        		<Card cardJSON={this.state.cardJSON} cardsLeft={this.state.allCards.length-1} 
+        		<Card cardJSON={this.state.cardJSON} />
+        	}
+        	</Row>
+
+        	{
+        		<GameInfo cardsLeft={this.state.allCards.length-1} 
         		runningCount={this.state.runningCount} dealtArray={this.state.cardsDealt}
-        		trueCount={this.state.trueCount}/>
+        		trueCount={this.state.trueCount} />
         	}
         </Container>
 		);
