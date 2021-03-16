@@ -8,7 +8,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <Deck numberOfDecks={6}/>
+        <Deck numberOfDecks={6} numberOfPlayers={1}/>
       </header>
     </div>
   );
