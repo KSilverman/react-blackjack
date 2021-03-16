@@ -21,12 +21,16 @@ class Deck extends React.Component {
 		//get the first number from the random shuffled array and get its corresponding JSON card object
 		var cardIndex = cardArray[0];
 		var cardJSONObject = cardHelper.getCardJSONObject(allCardJSONData, cardIndex);
+		var rCount = cardHelper.getCardRunningCountValue(cardJSONObject)
+		var tCount = rCount/(cardArray.length/52)
+
 
 		this.state = {
 			allCards: cardArray,
 			cardJSON: cardJSONObject,
 			cardsDealt: [cardHelper.getCardKey(cardJSONObject)],
-			runningCount: cardHelper.getCardRunningCountValue(cardJSONObject)
+			runningCount: rCount,
+			trueCount: tCount
 		}
 
 		//binding newCard function to the deck object itself
@@ -50,12 +54,15 @@ class Deck extends React.Component {
 
 			//find the running value of the new card
 			var cardRunningCountValue = cardHelper.getCardRunningCountValue(currentCardJSONObject);
+			var newRCount = this.state.runningCount+cardRunningCountValue
+			var newTCount = newRCount/(this.state.allCards.length/52)
 
 	      	this.setState(state => ({
 	      		allCards: this.state.allCards,
 	        	cardJSON: cardHelper.getCardJSONObject(allCardJSONData, currentCardIndex),
 	        	cardsDealt: this.state.cardsDealt,
-	        	runningCount: this.state.runningCount+cardRunningCountValue,
+	        	runningCount: newRCount,
+	        	trueCount: newTCount
 	      	}));
       	}
    }
@@ -66,12 +73,15 @@ class Deck extends React.Component {
     	//get the first number from the random shuffled array and get its corresponding JSON card object
 		var cardIndex = newCardArray[0];
 		var cardJSONObject = cardHelper.getCardJSONObject(allCardJSONData, cardIndex);
+		var rCount = cardHelper.getCardRunningCountValue(cardJSONObject)
+		var tCount = rCount/(newCardArray.length/52)
 
     	this.setState(state => ({
 				allCards: newCardArray,
 				cardJSON: cardJSONObject,
 				cardsDealt: [cardHelper.getCardKey(cardJSONObject)],
-				runningCount: cardHelper.getCardRunningCountValue(cardJSONObject)
+				runningCount: rCount,
+				trueCount: tCount
 	      	}));
    		
     }
@@ -93,7 +103,8 @@ class Deck extends React.Component {
 			</Row>
          	{
         		<Card cardJSON={this.state.cardJSON} cardsLeft={this.state.allCards.length-1} 
-        		runningCount={this.state.runningCount} dealtArray={this.state.cardsDealt}/>
+        		runningCount={this.state.runningCount} dealtArray={this.state.cardsDealt}
+        		trueCount={this.state.trueCount}/>
         	}
         </Container>
 		);

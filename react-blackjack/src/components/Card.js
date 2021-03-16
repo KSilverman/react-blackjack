@@ -37,6 +37,12 @@ class Card extends React.Component {
 						Running Count: {this.props.runningCount}
 					</Col>
 					<Col>
+						True Count: {Math.round((this.props.trueCount + Number.EPSILON) * 100) / 100}
+					</Col>
+					<Col> 
+						Decks Remaining: {Math.round(((this.props.cardsLeft/52) + Number.EPSILON) * 100) / 100}
+					</Col>
+					<Col>
 						Cards Dealt: {JSON.stringify(this.props.dealtArray)}
 					</Col>
 				</Row>
