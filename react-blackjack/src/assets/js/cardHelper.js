@@ -86,7 +86,17 @@ const helpers = {
 	},
 
 	/**
-	* Returns the key as a string of a given card JSON object
+	* Returns the value array of a given card
+	*
+	* @param {Object} cardJSONObject - the JSON card object [cardJSONObject={ "2H":{ "name": "2", "value": [2], "suit": "heart" }}].
+	* @return {number} the value array of the card [return=[2]].
+	*/
+	getCardValueArray: function (cardJSONObject) {
+		return cardJSONObject[Object.keys(cardJSONObject)].value
+	},
+
+	/**
+	* Returns the running value of the card; either -1,0,1
 	*
 	* @param {Object} cardJSONObject - the JSON card object [cardJSONObject={ "2H":{ "name": "2", "value": [2], "suit": "heart" }}].
 	* @return {number} the running count value of a card.

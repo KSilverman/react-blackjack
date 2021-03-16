@@ -166,17 +166,15 @@ class Deck extends React.Component {
 				 	</Button>
 				</Col>
 			</Row>
-         	{
-        		<Hand cardArray={this.state.dealerHand} handName="Dealer" />
-        	}
-    		{
-    			<Hand cardArray={this.state.playerHand} handName="Player"/>
-    		}
-        	{
-        		<GameInfo cardsLeft={(this.state.allCards.length)-((this.props.numberOfPlayers+1)*2)} 
+
+			<Hand cardArray={this.state.dealerHand} handName="Dealer" />
+
+			<Hand cardArray={this.state.playerHand} handName="Player"/>
+			
+			<GameInfo cardsLeft={(this.state.allCards.length)-((this.props.numberOfPlayers+1)*2)} 
         		runningCount={this.state.runningCount} dealtArray={this.state.cardsDealt}
         		trueCount={this.state.trueCount} />
-        	}
+
         </Container>
 		);
 	};
