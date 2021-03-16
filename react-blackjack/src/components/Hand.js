@@ -24,12 +24,17 @@ class Hand extends React.Component {
 			</Row>
 			<Row>
 			{
+				
 				this.props.cardArray.map(card => (
 					<Col className="outline">
 						<img src={cardHelper.getCardSVG(card)} alt="" />
 					</Col>
 				))
+				
 			}
+			<Col className="outline">
+					Hand Value: {cardHelper.getValueOfHand(this.props.cardArray)}
+				</Col>
 			</Row>
 			</div>
 		);

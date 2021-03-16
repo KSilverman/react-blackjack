@@ -1,6 +1,5 @@
 const helpers = {
 
-
 	/**
 	* Returns randomized shoe made up of number of desired decks.
 	*
@@ -94,6 +93,30 @@ const helpers = {
 	getCardValueArray: function (cardJSONObject) {
 		return cardJSONObject[Object.keys(cardJSONObject)].value
 	},
+
+
+	/**
+	* Returns the value of the current hand
+	*
+	* @param {Array[Object]} cardArray - Array of current cards in hand.
+	* @return {number} The count of the current hand.
+	*/
+
+	getValueOfHand: function (cardArray) {
+		var count = 0
+
+		for (let i = 0; i < cardArray.length; i++) {
+			var card = cardArray[i]
+			var cardValueArray = card[Object.keys(card)].value
+			if(cardValueArray[0] <= 1 || cardValueArray[1] >= 11) {
+				if(count + cardValueArray[1] > 21) {
+					count++
+				}else{ count += 11 }
+			}else{ count += cardValueArray[0] }
+		}
+		return count
+	},
+
 
 	/**
 	* Returns the running value of the card; either -1,0,1
