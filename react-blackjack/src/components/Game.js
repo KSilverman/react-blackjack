@@ -38,9 +38,10 @@ class Game extends React.Component {
 		}
 
 		//binding functions to the Game component itself
-		this.newDeal = this.newDeal.bind(this)
 		this.dealShoe = this.dealShoe.bind(this)
+		this.newDeal = this.newDeal.bind(this)
 		this.hit = this.hit.bind(this)
+		this.doubleDown = this.doubleDown.bind(this)
 		this.stayPlayer = this.stayPlayer.bind(this)
 	}
 
@@ -158,6 +159,42 @@ class Game extends React.Component {
 	  	}));
 	}
 
+	doubleDown() {
+
+	   	var newDrawnCardIndex = this.state.allCards[0];
+	   	var newDrawnCardJSONObject = cardHelper.getCardJSONObject(allCardJSONData, newDrawnCardIndex);
+
+	   	var newRCount = cardHelper.getCardRunningCountValue(newDrawnCardJSONObject) + this.state.runningCount
+	   	var newTCount = newRCount/((this.state.allCards.length-1)/52)
+
+	   	this.state.allCards.shift();
+
+	   	this.state.playerHand.push(newDrawnCardJSONObject)
+   		var playerHandContents = cardHelper.getValueOfHand(this.state.playerHand)
+   		var gameResult = cardHelper.evaluateBust(true, playerHandContents, this.state.wins.playerWins, this.state.wins.dealerWins, this.state.wins.ties)
+   		
+   		if(!gameResult.didBust) {
+   			var dealerHandContents = cardHelper.getValueOfHand(this.state.dealerHand)
+   			gameResult = cardHelper.evaluateWinner(this.props.hitOnSoft17, playerHandContents, dealerHandContents, this.state.wins.playerWins, this.state.wins.dealerWins, this.state.wins.ties)
+   		}
+
+   		this.setState(state => ({
+	  		allCards: this.state.allCards,
+	    	playerHand: this.state.playerHand,
+	    	cardsDealt: this.state.cardsDealt,
+	    	runningCount: newRCount,
+	    	trueCount: newTCount,
+	    	winner: gameResult.gameWinner,
+	    	wins: {
+	    		"playerWins": gameResult.playerWins,
+	    		"dealerWins": gameResult.dealerWins,
+	    		"ties": gameResult.ties,
+	    	},
+	    	playerTurn: false,
+	    	isGameOver: gameResult.gameOver
+  		}));
+}
+
 	stayPlayer() {
 
 	   	var playerHandContents = cardHelper.getValueOfHand(this.state.playerHand)
@@ -270,6 +307,11 @@ class Game extends React.Component {
 				<Col>
 					<Button onClick={this.hit} variant="success" disabled={!this.state.playerTurn || this.state.isGameOver}>
 				 		Hit Player
+				 	</Button>
+				</Col>
+				<Col>
+					<Button onClick={this.doubleDown} variant="info" disabled={!this.state.playerTurn || this.state.isGameOver}>
+				 		Double Down
 				 	</Button>
 				</Col>
 				<Col>
