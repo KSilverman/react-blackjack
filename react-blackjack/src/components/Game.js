@@ -130,11 +130,11 @@ class Game extends React.Component {
 	   	{
 	   		this.state.dealerHand.push(newDrawnCardJSONObject)
 	   		var dealerHandContents = cardHelper.getValueOfHand(this.state.dealerHand)
-	   		var playerHandContents = cardHelper.getValueOfHand(this.state.playerHand)
 
 	   		gameResult = cardHelper.evaluateBust(isPlayerTurn, dealerHandContents, this.state.wins.playerWins, this.state.wins.dealerWins, this.state.wins.ties)
 	   		
 	   		if(!gameResult.didBust) {
+	   			var playerHandContents = cardHelper.getValueOfHand(this.state.playerHand)
 	   			gameResult = cardHelper.evaluateWinner(this.props.hitOnSoft17, playerHandContents, dealerHandContents, this.state.wins.playerWins, this.state.wins.dealerWins, this.state.wins.ties)
 	   		}
 
