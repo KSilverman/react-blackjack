@@ -29,10 +29,13 @@ class GameInfo extends React.Component {
 						Decks Remaining: {Math.round(((this.props.cardsLeft/52) + Number.EPSILON) * 100) / 100}
 					</Col>
 					<Col>
-						Cards Dealt: {}
+						Cards remaining: {this.props.cardsLeft}
 					</Col>
 					<Col>
-						Cards remaining: {this.props.cardsLeft}
+						Score: {this.props.wins.playerWins} - {this.props.wins.dealerWins} - {this.props.wins.ties}
+					</Col>
+					<Col>
+						Winner: {this.props.winner}
 					</Col>
 				</Row>
 			</div>

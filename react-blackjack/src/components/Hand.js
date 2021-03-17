@@ -23,8 +23,7 @@ class Hand extends React.Component {
 				{this.props.handName}'s Cards
 			</Row>
 			<Row>
-			{
-				
+			{		
 				this.props.cardArray.map(card => (
 					<Col className="outline">
 						<img src={cardHelper.getCardSVG(card)} alt="" />
@@ -32,8 +31,8 @@ class Hand extends React.Component {
 				))
 				
 			}
-			<Col className="outline">
-					Hand Value: {cardHelper.getValueOfHand(this.props.cardArray)}
+				<Col className="outline">
+					Hand Value: {cardHelper.getValueOfHand(this.props.cardArray).count}
 				</Col>
 			</Row>
 			</div>

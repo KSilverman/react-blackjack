@@ -101,20 +101,25 @@ const helpers = {
 	* @param {Array[Object]} cardArray - Array of current cards in hand.
 	* @return {number} The count of the current hand.
 	*/
-
 	getValueOfHand: function (cardArray) {
 		var count = 0
+		var containsAce = false;
 
 		for (let i = 0; i < cardArray.length; i++) {
 			var card = cardArray[i]
 			var cardValueArray = card[Object.keys(card)].value
 			if(cardValueArray[0] <= 1 || cardValueArray[1] >= 11) {
+				containsAce = true;
 				if(count + cardValueArray[1] > 21) {
 					count++
-				}else{ count += 11 }
-			}else{ count += cardValueArray[0] }
+				} else { 
+					count += 11 
+				}
+			} else { 
+				count += cardValueArray[0] 
+			}
 		}
-		return count
+		return { count, containsAce };
 	},
 
 
@@ -143,6 +148,108 @@ const helpers = {
 				return 0;
 			}
 		}
+	},
+
+	evalutateInitialDeal: function(playerCards, dealerCards, playerWins, dealerWins, ties) {
+		var theNewWinner = ""
+		var gameOver = false
+		var playerHandCount = playerCards.count
+		var dealerHandCount = dealerCards.count
+
+		//if there is 21
+		if(playerHandCount === 21 || dealerHandCount === 21)
+		{
+			//if the player has 21 and the dealer does not
+			if(playerHandCount > dealerHandCount)
+			{
+				theNewWinner = "player"
+				playerWins++;
+			}
+			//both the player and the dealer have 21
+			else if(playerHandCount === dealerHandCount) {
+				theNewWinner = "tie";
+				ties++
+			}
+			//the dealer has 21 and the player does not
+			else
+			{
+				theNewWinner = "dealer"
+				dealerWins++;
+			}
+			gameOver = true;
+		}
+
+		return {
+			gameWinner: theNewWinner,
+			playerWins: playerWins,
+			dealerWins: dealerWins,
+			ties: ties,
+			gameOver: gameOver
+		}
+	},
+
+	evaluateBust: function(playerTurn, cards, playerWins, dealerWins, ties) {
+		var didBust = false;
+		var theNewWinner = ""
+		var gameOver = false;
+
+		var handValue = cards.count;
+
+		if(handValue > 21) 
+   		{
+   			//busted
+   			didBust = true;
+   			theNewWinner = (playerTurn) ? "dealer" : "player"
+   			if(theNewWinner == "dealer") { dealerWins++ } else { playerWins++ }
+   			gameOver = true
+   		}
+
+		return {
+			didBust: didBust,
+			gameWinner: theNewWinner,
+			playerWins: playerWins,
+			dealerWins: dealerWins,
+			ties: ties,
+			gameOver: gameOver
+		};
+	},
+
+	evaluateWinner: function(hitOnSoft17, playerCards, dealerCards, playerWins, dealerWins, ties) {
+		var theNewWinner = ""
+		var gameOver = false
+		var playerHandCount = playerCards.count
+		var dealerHandCount = dealerCards.count
+		var dealerHandContainsAce = dealerCards.containsAce
+
+		if(dealerHandCount >= 17 && dealerHandCount <= 21)
+   		{
+   			if(!(hitOnSoft17 && dealerHandCount === 17 && dealerHandContainsAce))
+   			{
+				if(playerHandCount > dealerHandCount)
+				{
+					theNewWinner = "player"
+					playerWins++;
+				}
+				else if(playerHandCount === dealerHandCount) {
+					theNewWinner = "tie";
+					ties++
+				}
+				else
+				{
+					theNewWinner = "dealer"
+					dealerWins++;
+				}
+				gameOver = true;
+			}
+		}
+
+		return {
+			gameWinner: theNewWinner,
+			playerWins: playerWins,
+			dealerWins: dealerWins,
+			ties: ties,
+			gameOver: gameOver
+		};
 	}
 }
 

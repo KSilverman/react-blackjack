@@ -1,6 +1,6 @@
 import './App.css';
 import './assets/css/react-blackjack.css'
-import Deck from './components/Deck'
+import Game from './components/Game'
 import cardHelper from './assets/js/cardHelper'
 
 function App() {
@@ -8,7 +8,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <Deck numberOfDecks={6} numberOfPlayers={1}/>
+        <Game numberOfDecks={6} numberOfPlayers={1} hitOnSoft17={false}/>
       </header>
     </div>
   );
