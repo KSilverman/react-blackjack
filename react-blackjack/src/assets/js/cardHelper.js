@@ -103,23 +103,29 @@ const helpers = {
 	*/
 	getValueOfHand: function (cardArray) {
 		var count = 0
-		var containsAce = false;
+		var aceCount = 0
+		var containsAce = false
 
 		for (let i = 0; i < cardArray.length; i++) {
 			var card = cardArray[i]
 			var cardValueArray = card[Object.keys(card)].value
 			if(cardValueArray[0] <= 1 || cardValueArray[1] >= 11) {
-				containsAce = true;
-				if(count + cardValueArray[1] > 21) {
-					count++
-				} else { 
-					count += 11 
-				}
-			} else { 
-				count += cardValueArray[0] 
+				aceCount++
+				containsAce = true
+			}else{
+				count += cardValueArray[0]
 			}
 		}
-		return { count, containsAce };
+		
+		for (let i = aceCount ; i > 0; i--) {
+			if(count + 11 <= 21 && i < 2) {
+				count+=11
+			} else { 
+				count++ 
+			}
+		}
+		return { count, containsAce }
+
 	},
 
 
