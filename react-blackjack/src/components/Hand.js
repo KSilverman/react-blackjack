@@ -17,19 +17,22 @@ class Hand extends React.Component {
 	}
 
 	renderCards() {
-		var cards = [];
+		var cardsImgs = [];
+		var cardCounts = []
 		for(let i = this.props.cardArray.length-1; i >= 0; i--) 
 		{
 			var showCard = this.props.showFirstCard
 
 			if(!showCard && i !== this.props.cardArray.length-1)
 			{ 
-				showCard = !showCard 
+				showCard = !showCard
 			}
-
-			cards.push(<img src={cardHelper.getCardSVG(this.props.cardArray[i], showCard)}  alt="" />)
+			
+			if(showCard) { cardCounts.push(this.props.cardArray[i]) }
+			
+			cardsImgs.push(<img src={cardHelper.getCardSVG(this.props.cardArray[i], showCard)}  alt="" />)
 		}
-		return cards;
+		return { cardsImgs, cardCounts };
 	}
 
 
@@ -41,14 +44,14 @@ class Hand extends React.Component {
 			</Row>
 			<Row>
 			{
-				this.renderCards().map(card => (
+				this.renderCards().cardsImgs.map(card => (
 					<Col className="outline">
 						{card}
 					</Col>
 				))
 			}
 				<Col className="outline">
-					Hand Value: {cardHelper.getValueOfHand(this.props.cardArray).count}
+					Hand Value: {cardHelper.getValueOfHand(this.renderCards().cardCounts).count}
 				</Col>
 			</Row>
 			</div>

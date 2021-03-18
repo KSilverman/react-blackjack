@@ -118,7 +118,7 @@ const helpers = {
 			}
 		}
 		
-		for (let i = aceCount ; i > 0; i--) {
+		for (let i = aceCount; i > 0; i--) {
 			if(count + 11 <= 21 && i < 2) {
 				count+=11
 			} else { 
