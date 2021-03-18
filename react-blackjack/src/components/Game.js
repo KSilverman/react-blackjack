@@ -33,6 +33,7 @@ class Game extends React.Component {
         		"ties": 0
         	},
         	playerTurn: true,
+        	showDealerFirstCard: false,
         	isGameOver: true,
         	isStartOver: true,
 		}
@@ -49,7 +50,7 @@ class Game extends React.Component {
 		if(this.state.allCards.length > ((this.props.numberOfPlayers+1)*2))
 		{
 
-			//var gameOver = false;
+			var showFirstCard = false;
 			this.state.playerHand = [];
 			this.state.dealerHand = [];
 			var newRCount = 0
@@ -85,6 +86,11 @@ class Game extends React.Component {
 				this.state.allCards.shift();
 			}
 
+			if(gameResult.gameWinner !== "")
+			{
+				showFirstCard = true;
+			}
+
 	      	this.setState(state => ({
 	      		allCards: this.state.allCards,
 	        	playerHand: this.state.playerHand,
@@ -99,6 +105,7 @@ class Game extends React.Component {
 	        		"ties": gameResult.ties
 	        	},
 	        	playerTurn: true,
+	        	showDealerFirstCard: showFirstCard,
 	        	isGameOver: gameResult.gameOver
 	      	}));
       	}
@@ -107,6 +114,7 @@ class Game extends React.Component {
 	hit() {
 
 		var isPlayerTurn = this.state.playerTurn
+		var showFirstCard = this.state.showDealerFirstCard
 
 	   	var newDrawnCardIndex = this.state.allCards[0];
 	   	var newDrawnCardJSONObject = cardHelper.getCardJSONObject(allCardJSONData, newDrawnCardIndex);
@@ -125,6 +133,8 @@ class Game extends React.Component {
 	   		var playerHandContents = cardHelper.getValueOfHand(this.state.playerHand)
 	   		gameResult = cardHelper.evaluateBust(isPlayerTurn, playerHandContents, this.state.wins.playerWins, this.state.wins.dealerWins, this.state.wins.ties)
 
+	   		if(gameResult.didBust) { showFirstCard = true }
+
 	   	} 
 	   	//it's the dealer's turn
 	   	else 
@@ -138,7 +148,6 @@ class Game extends React.Component {
 	   			var playerHandContents = cardHelper.getValueOfHand(this.state.playerHand)
 	   			gameResult = cardHelper.evaluateWinner(this.props.hitOnSoft17, playerHandContents, dealerHandContents, this.state.wins.playerWins, this.state.wins.dealerWins, this.state.wins.ties)
 	   		}
-
 	   	}
 
 	   	this.setState(state => ({
@@ -155,6 +164,7 @@ class Game extends React.Component {
 	    		"ties": gameResult.ties,
 	    	},
 	    	playerTurn: isPlayerTurn,
+	    	showDealerFirstCard: showFirstCard,
 	    	isGameOver: gameResult.gameOver
 	  	}));
 	}
@@ -191,6 +201,7 @@ class Game extends React.Component {
 	    		"ties": gameResult.ties,
 	    	},
 	    	playerTurn: false,
+	    	showDealerFirstCard: true,
 	    	isGameOver: gameResult.gameOver
   		}));
 }
@@ -210,6 +221,7 @@ class Game extends React.Component {
 	    		"ties": gameResult.ties
 	    	},
 	    	playerTurn: false,
+	    	showDealerFirstCard: true,
 	    	isGameOver: gameResult.gameOver
 	  	}));
 
@@ -223,6 +235,7 @@ class Game extends React.Component {
 		var dealerCards = [];
 		var cardsDealtOut = [];
 		var rCount = 0;
+		var showFirstCard = false
 
 		for(let i = 0; i <= this.props.numberOfPlayers+1; i+=2)
 		{
@@ -252,6 +265,11 @@ class Game extends React.Component {
 			newCardArray.shift();
 		}
 
+		if(gameResult.gameWinner !== "")
+		{
+			showFirstCard = true;
+		}
+
 		this.setState(state => ({
 			allCards: newCardArray,
 			//cardJSON: cardJSONObject,
@@ -267,6 +285,7 @@ class Game extends React.Component {
 				"ties": gameResult.ties
 			},
 			playerTurn: true,
+			showDealerFirstCard: showFirstCard,
 			isGameOver: gameResult.gameOver,
 			isStartOver: false,
 		}));
@@ -289,7 +308,7 @@ class Game extends React.Component {
 				</Col>
 			</Row>
 
-			<Hand cardArray={this.state.dealerHand} handName="Dealer" />
+			<Hand cardArray={this.state.dealerHand} showFirstCard={this.state.showDealerFirstCard} handName="Dealer" />
 
 			<Row>
 				<Col>
@@ -301,7 +320,7 @@ class Game extends React.Component {
 
 			<Row className="dividingLine"></Row>
 
-			<Hand cardArray={this.state.playerHand} handName="Player"/>
+			<Hand cardArray={this.state.playerHand} showFirstCard={true} handName="Player"/>
 
 			<Row>
 				<Col>

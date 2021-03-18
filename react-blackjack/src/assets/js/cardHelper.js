@@ -80,8 +80,9 @@ const helpers = {
 	*
 	* More info --> https://www.freecodecamp.org/news/require-module-in-node-js-everything-about-module-require-ccccd3ad383/
 	*/
-	getCardSVG: function (cardJSONObject) {
-		return require('../img/'+Object.keys(cardJSONObject)[0]+'.svg')
+	getCardSVG: function (cardJSONObject, showCard) {
+		var img = (showCard) ? require('../img/'+Object.keys(cardJSONObject)[0]+'.svg') : require('../img/BLUE_BACK.svg')
+		return img;
 	},
 
 	/**
