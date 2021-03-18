@@ -69,11 +69,14 @@ class Game extends React.Component {
 
 				this.state.dealerHand.push(dealerCardJSONObject);
 				this.state.cardsDealt.push(dealerCardJSONObject);
-
-				newRCount += (cardHelper.getCardRunningCountValue(playerCardJSONObject) + cardHelper.getCardRunningCountValue(dealerCardJSONObject))
+				if (i === 0) {
+					newRCount += (cardHelper.getCardRunningCountValue(playerCardJSONObject))
+				} else {
+					newRCount += (cardHelper.getCardRunningCountValue(playerCardJSONObject) + cardHelper.getCardRunningCountValue(dealerCardJSONObject))
+				}
 			}
 
-			newRCount = newRCount + this.state.runningCount
+			newRCount = newRCount + this.state.runningCount 
 			var newTCount = newRCount/((this.state.allCards.length-((this.props.numberOfPlayers+1)*2))/52)
 
 			var playerHandContents = cardHelper.getValueOfHand(this.state.playerHand)
@@ -89,6 +92,7 @@ class Game extends React.Component {
 			if(gameResult.gameWinner !== "")
 			{
 				showFirstCard = true;
+				newRCount += cardHelper.getCardRunningCountValue(this.state.dealerHand[0])
 			}
 
 	      	this.setState(state => ({
@@ -133,7 +137,10 @@ class Game extends React.Component {
 	   		var playerHandContents = cardHelper.getValueOfHand(this.state.playerHand)
 	   		gameResult = cardHelper.evaluateBust(isPlayerTurn, playerHandContents, this.state.wins.playerWins, this.state.wins.dealerWins, this.state.wins.ties)
 
-	   		if(gameResult.didBust) { showFirstCard = true }
+	   		if(gameResult.didBust) { 
+	   			showFirstCard = true 
+	   			newRCount += cardHelper.getCardRunningCountValue(this.state.dealerHand[0])
+	   		}
 
 	   	} 
 	   	//it's the dealer's turn
@@ -174,7 +181,7 @@ class Game extends React.Component {
 	   	var newDrawnCardIndex = this.state.allCards[0];
 	   	var newDrawnCardJSONObject = cardHelper.getCardJSONObject(allCardJSONData, newDrawnCardIndex);
 
-	   	var newRCount = cardHelper.getCardRunningCountValue(newDrawnCardJSONObject) + this.state.runningCount
+	   	var newRCount = cardHelper.getCardRunningCountValue(newDrawnCardJSONObject) + this.state.runningCount + cardHelper.getCardRunningCountValue(this.state.dealerHand[0])
 	   	var newTCount = newRCount/((this.state.allCards.length-1)/52)
 
 	   	this.state.allCards.shift();
@@ -214,6 +221,7 @@ class Game extends React.Component {
 		var gameResult = cardHelper.evaluateWinner(this.props.hitOnSoft17, playerHandContents ,dealerHandConents, this.state.wins.playerWins, this.state.wins.dealerWins, this.state.wins.ties)
 
 		this.setState(state => ({
+			runningCount: this.state.runningCount + cardHelper.getCardRunningCountValue(this.state.dealerHand[0]),
 	  		winner: gameResult.gameWinner,
 	    	wins: {
 	    		"playerWins": gameResult.playerWins,
@@ -251,7 +259,11 @@ class Game extends React.Component {
 			dealerCards.push(dealerCardJSONObject);
 			cardsDealtOut.push(dealerCardJSONObject);
 
-			rCount += (cardHelper.getCardRunningCountValue(playerCardJSONObject) + cardHelper.getCardRunningCountValue(dealerCardJSONObject));
+			if (i === 0) {
+				rCount += (cardHelper.getCardRunningCountValue(playerCardJSONObject))
+			} else {
+				rCount += (cardHelper.getCardRunningCountValue(playerCardJSONObject) + cardHelper.getCardRunningCountValue(dealerCardJSONObject))
+			}
 
 		}
 
@@ -268,6 +280,7 @@ class Game extends React.Component {
 		if(gameResult.gameWinner !== "")
 		{
 			showFirstCard = true;
+			rCount += cardHelper.getCardRunningCountValue(this.state.dealerHand[0])
 		}
 
 		this.setState(state => ({

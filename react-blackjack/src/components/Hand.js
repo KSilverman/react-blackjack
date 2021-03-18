@@ -19,11 +19,11 @@ class Hand extends React.Component {
 	renderCards() {
 		var cardsImgs = [];
 		var cardCounts = []
-		for(let i = this.props.cardArray.length-1; i >= 0; i--) 
+		for(let i = 0; i < this.props.cardArray.length; i++) 
 		{
 			var showCard = this.props.showFirstCard
 
-			if(!showCard && i !== this.props.cardArray.length-1)
+			if(!showCard && i !== 0)
 			{ 
 				showCard = !showCard
 			}
