@@ -8,7 +8,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <Game numberOfDecks={6} numberOfPlayers={1} hitOnSoft17={false}/>
+        <Game numberOfDecks={6} numberOfPlayers={1} hitOnSoft17={false} maxSplits={4}/>
       </header>
     </div>
   );

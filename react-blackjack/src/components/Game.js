@@ -285,9 +285,31 @@ class Game extends React.Component {
 
 	split(index) {
 		var playerCards = this.state.playerHands[index]
-		if(playerCards.length === 2 && cardHelper.getCardName(playerCards[0]) === cardHelper.getCardName(playerCards[1])) {
+		if(playerCards.length === 2 && cardHelper.getCardName(playerCards[0]) === cardHelper.getCardName(playerCards[1]) && index < this.props.maxSplits)
+		{
 			this.state.playerHands.push([playerCards.shift()])
-			this.setState(state => ({ playerHands: this.state.playerHands }))
+			var newRCount = this.state.runningCount
+
+			//deal out two more cards
+			//TODO: wait for the first hand to finish until the new card is dealt to the second hand
+
+			for(let i = index; i <= index+1; i++)
+			{
+				var playerCardIndex = this.state.allCards[0];
+				var playerCardJSONObject = cardHelper.getCardJSONObject(allCardJSONData, playerCardIndex);
+
+				this.state.playerHands[i].push(playerCardJSONObject);
+
+				this.state.cardsDealt.push(playerCardJSONObject);
+
+				newRCount += cardHelper.getCardRunningCountValue(playerCardJSONObject)
+
+				this.state.allCards.shift();
+			}
+
+			var newTCount = newRCount/((this.state.allCards.length)/52)
+
+			this.setState(state => ({ playerHands: this.state.playerHands, runningCount: newRCount,  trueCount: newTCount }))
 		} 
 		else 
 		{ 
@@ -365,7 +387,7 @@ class Game extends React.Component {
 						 	</Button>
 						</Col>
 						<Col>
-							<Button onClick={() => this.split(index)} variant="warning" disabled={!this.state.playerTurn || this.state.isGameOver}>
+							<Button onClick={() => this.split(index)} variant="warning" disabled={!this.state.playerTurn || this.state.isGameOver || index >= this.props.maxSplits-1}>
 						 		Split
 						 	</Button>
 						</Col>
