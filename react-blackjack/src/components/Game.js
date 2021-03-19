@@ -180,9 +180,7 @@ class Game extends React.Component {
       	}
    }
 
-	hit() {
-
-		
+	hit(index) {
 
 		var isPlayerTurn = this.state.playerTurn
 		var showFirstCard = this.state.showDealerFirstCard
@@ -200,8 +198,8 @@ class Game extends React.Component {
 	   	//it's the player's turn
 	   	if(isPlayerTurn) 
 	   	{
-	   		this.state.playerHands[0].push(newDrawnCardJSONObject)
-	   		var playerHandContents = cardHelper.getValueOfHand(this.state.playerHands[0])
+	   		this.state.playerHands[index].push(newDrawnCardJSONObject)
+	   		var playerHandContents = cardHelper.getValueOfHand(this.state.playerHands[index])
 	   		gameResult = cardHelper.evaluateBust(isPlayerTurn, playerHandContents, this.state.wins.playerWins, this.state.wins.dealerWins, this.state.wins.ties)
 
 	   		if(gameResult.didBust) { 
@@ -219,8 +217,12 @@ class Game extends React.Component {
 	   		gameResult = cardHelper.evaluateBust(isPlayerTurn, dealerHandContents, this.state.wins.playerWins, this.state.wins.dealerWins, this.state.wins.ties)
 	   		
 	   		if(!gameResult.didBust) {
-	   			var playerHandContents = cardHelper.getValueOfHand(this.state.playerHands[0])
-	   			gameResult = cardHelper.evaluateWinner(this.props.hitOnSoft17, playerHandContents, dealerHandContents, this.state.wins.playerWins, this.state.wins.dealerWins, this.state.wins.ties)
+	   			for(let i = 0; i < this.state.playerHands.length; i++)
+	   			{
+	   				//TO DO: Fix evaluate winner method to check each hand when dealer's turn (don't return gameover unless it's the last hand)
+		   			var playerHandContents = cardHelper.getValueOfHand(this.state.playerHands[i])
+		   			gameResult = cardHelper.evaluateWinner(this.props.hitOnSoft17, playerHandContents, dealerHandContents, this.state.wins.playerWins, this.state.wins.dealerWins, this.state.wins.ties)
+	   			}
 	   		}
 	   	}
 
@@ -243,7 +245,7 @@ class Game extends React.Component {
 	  	}));
 	}
 
-	doubleDown() {
+	doubleDown(index) {
 
 	   	var newDrawnCardIndex = this.state.allCards[0];
 	   	var newDrawnCardJSONObject = cardHelper.getCardJSONObject(allCardJSONData, newDrawnCardIndex);
@@ -253,11 +255,12 @@ class Game extends React.Component {
 
 	   	this.state.allCards.shift();
 
-	   	this.state.playerHands[0].push(newDrawnCardJSONObject)
-   		var playerHandContents = cardHelper.getValueOfHand(this.state.playerHands[0])
+	   	this.state.playerHands[index].push(newDrawnCardJSONObject)
+   		var playerHandContents = cardHelper.getValueOfHand(this.state.playerHands[index])
    		var gameResult = cardHelper.evaluateBust(true, playerHandContents, this.state.wins.playerWins, this.state.wins.dealerWins, this.state.wins.ties)
    		
    		if(!gameResult.didBust) {
+   			//don't evaluate dealer's hand until all player hands are done
    			var dealerHandContents = cardHelper.getValueOfHand(this.state.dealerHand)
    			gameResult = cardHelper.evaluateWinner(this.props.hitOnSoft17, playerHandContents, dealerHandContents, this.state.wins.playerWins, this.state.wins.dealerWins, this.state.wins.ties)
    		}
@@ -280,11 +283,24 @@ class Game extends React.Component {
   		}));
 	}
 
-	stayPlayer() {
+	split(index) {
+		var playerCards = this.state.playerHands[index]
+		if(playerCards.length === 2 && cardHelper.getCardName(playerCards[0]) === cardHelper.getCardName(playerCards[1])) {
+			this.state.playerHands.push([playerCards.shift()])
+			this.setState(state => ({ playerHands: this.state.playerHands }))
+		} 
+		else 
+		{ 
+			alert("CANT SPLIT") 
+		}
+	}
 
-	   	var playerHandContents = cardHelper.getValueOfHand(this.state.playerHands[0])
+	stayPlayer(index) {
+
+	   	var playerHandContents = cardHelper.getValueOfHand(this.state.playerHands[index])
 		var dealerHandConents = cardHelper.getValueOfHand(this.state.dealerHand)
 
+		//don't evaluate until all hands are done
 		var gameResult = cardHelper.evaluateWinner(this.props.hitOnSoft17, playerHandContents ,dealerHandConents, this.state.wins.playerWins, this.state.wins.dealerWins, this.state.wins.ties)
 
 		this.setState(state => ({
@@ -313,7 +329,7 @@ class Game extends React.Component {
 					</Button>
 				</Col>
 				<Col>
-				 	<Button onClick={this.dealShoe} variant="danger">
+				 	<Button onClick={this.dealShoe} variant="light">
 				 		New Shoe
 				 	</Button>
 				</Col>
@@ -323,7 +339,7 @@ class Game extends React.Component {
 
 			<Row>
 				<Col>
-					<Button onClick={() => this.hit()} variant="success" id="dealerHitButton" disabled={this.state.playerTurn || this.state.isGameOver}>
+					<Button onClick={() => this.hit(0)} variant="success" id="dealerHitButton" disabled={this.state.playerTurn || this.state.isGameOver}>
 				 		Hit Dealer
 				 	</Button>
 				</Col>
@@ -332,24 +348,29 @@ class Game extends React.Component {
 			<Row className="dividingLine"></Row>
 
 			{
-				this.state.playerHands.map(playerHandArray => (
+				this.state.playerHands.map((playerHandArray, index) => (
 
 					<>
 					<Hand cardArray={playerHandArray} showFirstCard={true} handName="Player"/>
 					
 					<Row>
 						<Col>
-							<Button onClick={() => this.hit()} variant="success" disabled={!this.state.playerTurn || this.state.isGameOver}>
+							<Button onClick={() => this.hit(index)} variant="success" disabled={!this.state.playerTurn || this.state.isGameOver}>
 						 		Hit Player
 						 	</Button>
 						</Col>
 						<Col>
-							<Button onClick={() => this.doubleDown()} variant="info" disabled={!this.state.playerTurn || this.state.isGameOver || playerHandArray.length > 2}>
+							<Button onClick={() => this.doubleDown(index)} variant="info" disabled={!this.state.playerTurn || this.state.isGameOver || playerHandArray.length > 2}>
 						 		Double Down
 						 	</Button>
 						</Col>
 						<Col>
-						 	<Button onClick={() => this.stayPlayer()} disabled={!this.state.playerTurn || this.state.isGameOver} variant="warning">
+							<Button onClick={() => this.split(index)} variant="warning" disabled={!this.state.playerTurn || this.state.isGameOver}>
+						 		Split
+						 	</Button>
+						</Col>
+						<Col>
+						 	<Button onClick={() => this.stayPlayer(index)} disabled={!this.state.playerTurn || this.state.isGameOver} variant="danger">
 						 		Stay
 						 	</Button>
 						</Col>

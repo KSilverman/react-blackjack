@@ -95,6 +95,10 @@ const helpers = {
 		return cardJSONObject[Object.keys(cardJSONObject)].value
 	},
 
+	getCardName: function (cardJSONObject) {
+		return cardJSONObject[Object.keys(cardJSONObject)].name
+	},
+
 
 	/**
 	* Returns the value of the current hand
