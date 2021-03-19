@@ -345,7 +345,7 @@ class Game extends React.Component {
 						 	</Button>
 						</Col>
 						<Col>
-							<Button onClick={this.doubleDown} variant="info" disabled={!this.state.playerTurn || this.state.isGameOver}>
+							<Button onClick={this.doubleDown} variant="info" disabled={!this.state.playerTurn || this.state.isGameOver || playerHandArray.length > 2}>
 						 		Double Down
 						 	</Button>
 						</Col>
