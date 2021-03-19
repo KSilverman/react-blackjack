@@ -182,7 +182,7 @@ class Game extends React.Component {
 
 	hit() {
 
-		if(a) {console.log("a is true")} else {console.log("a is false")}
+		
 
 		var isPlayerTurn = this.state.playerTurn
 		var showFirstCard = this.state.showDealerFirstCard
