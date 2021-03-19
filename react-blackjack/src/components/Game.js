@@ -41,9 +41,6 @@ class Game extends React.Component {
 		//binding functions to the Game component itself
 		this.dealShoe = this.dealShoe.bind(this)
 		this.newDeal = this.newDeal.bind(this)
-		this.hit = this.hit.bind(this)
-		this.doubleDown = this.doubleDown.bind(this)
-		this.stayPlayer = this.stayPlayer.bind(this)
 	}
 
     dealShoe() {
@@ -185,6 +182,8 @@ class Game extends React.Component {
 
 	hit() {
 
+		if(a) {console.log("a is true")} else {console.log("a is false")}
+
 		var isPlayerTurn = this.state.playerTurn
 		var showFirstCard = this.state.showDealerFirstCard
 
@@ -324,7 +323,7 @@ class Game extends React.Component {
 
 			<Row>
 				<Col>
-					<Button onClick={this.hit} variant="success" id="dealerHitButton" disabled={this.state.playerTurn || this.state.isGameOver}>
+					<Button onClick={() => this.hit()} variant="success" id="dealerHitButton" disabled={this.state.playerTurn || this.state.isGameOver}>
 				 		Hit Dealer
 				 	</Button>
 				</Col>
@@ -340,17 +339,17 @@ class Game extends React.Component {
 					
 					<Row>
 						<Col>
-							<Button onClick={this.hit} variant="success" disabled={!this.state.playerTurn || this.state.isGameOver}>
+							<Button onClick={() => this.hit()} variant="success" disabled={!this.state.playerTurn || this.state.isGameOver}>
 						 		Hit Player
 						 	</Button>
 						</Col>
 						<Col>
-							<Button onClick={this.doubleDown} variant="info" disabled={!this.state.playerTurn || this.state.isGameOver || playerHandArray.length > 2}>
+							<Button onClick={() => this.doubleDown()} variant="info" disabled={!this.state.playerTurn || this.state.isGameOver || playerHandArray.length > 2}>
 						 		Double Down
 						 	</Button>
 						</Col>
 						<Col>
-						 	<Button onClick={this.stayPlayer} disabled={!this.state.playerTurn || this.state.isGameOver} variant="warning">
+						 	<Button onClick={() => this.stayPlayer()} disabled={!this.state.playerTurn || this.state.isGameOver} variant="warning">
 						 		Stay
 						 	</Button>
 						</Col>
