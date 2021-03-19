@@ -254,7 +254,7 @@ class Game extends React.Component {
 
 	   	this.state.allCards.shift();
 
-	   	this.state.playerHands.push(newDrawnCardJSONObject)
+	   	this.state.playerHands[0].push(newDrawnCardJSONObject)
    		var playerHandContents = cardHelper.getValueOfHand(this.state.playerHands[0])
    		var gameResult = cardHelper.evaluateBust(true, playerHandContents, this.state.wins.playerWins, this.state.wins.dealerWins, this.state.wins.ties)
    		
