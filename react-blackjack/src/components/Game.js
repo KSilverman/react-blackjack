@@ -21,7 +21,7 @@ class Game extends React.Component {
 
 		this.state = {
 			allCards: [],
-        	playerHand: [],
+        	playerHands: [[]],
 			dealerHand: [],
         	cardsDealt: [],
         	runningCount: 0,
@@ -46,12 +46,80 @@ class Game extends React.Component {
 		this.stayPlayer = this.stayPlayer.bind(this)
 	}
 
+    dealShoe() {
+		var newCardArray = cardHelper.getShoe(this.props.numberOfDecks)
+
+		//var gameOver = false;
+		var playerCards = [[]];
+		var dealerCards = [];
+		var cardsDealtOut = [];
+		var rCount = 0;
+		var showFirstCard = false
+
+		for(let i = 0; i <= this.props.numberOfPlayers+1; i+=2)
+		{
+			var playerCardIndex = newCardArray[i];
+			var playerCardJSONObject = cardHelper.getCardJSONObject(allCardJSONData, playerCardIndex);
+
+			playerCards[0].push(playerCardJSONObject);
+			cardsDealtOut.push(playerCardJSONObject);
+
+			var dealerCardIndex = newCardArray[i+1];
+			var dealerCardJSONObject = cardHelper.getCardJSONObject(allCardJSONData, dealerCardIndex);
+
+			dealerCards.push(dealerCardJSONObject);
+			cardsDealtOut.push(dealerCardJSONObject);
+
+			if (i === 0) {
+				rCount += (cardHelper.getCardRunningCountValue(playerCardJSONObject))
+			} else {
+				rCount += (cardHelper.getCardRunningCountValue(playerCardJSONObject) + cardHelper.getCardRunningCountValue(dealerCardJSONObject))
+			}
+
+		}
+
+		var tCount = rCount/((newCardArray.length-cardsDealtOut.length)/52)
+		var playerHandContents = cardHelper.getValueOfHand(playerCards[0]);
+		var dealerHandContents = cardHelper.getValueOfHand(dealerCards);
+
+		var gameResult = cardHelper.evalutateInitialDeal(playerHandContents, dealerHandContents, 0, 0, 0)
+
+		for(let i = 1; i <= ((this.props.numberOfPlayers+1)*2); i++) {
+			newCardArray.shift();
+		}
+
+		if(gameResult.gameWinner !== "")
+		{
+			showFirstCard = true;
+			rCount += cardHelper.getCardRunningCountValue(this.state.dealerHand[0])
+		}
+
+		this.setState(state => ({
+			allCards: newCardArray,
+			playerHands: playerCards,
+			dealerHand: dealerCards,
+			cardsDealt: cardsDealtOut,
+			runningCount: rCount,
+			trueCount: tCount,
+			winner: gameResult.gameWinner,
+			wins: {
+				"playerWins": gameResult.playerWins,
+				"dealerWins": gameResult.dealerWins,
+				"ties": gameResult.ties
+			},
+			playerTurn: true,
+			showDealerFirstCard: showFirstCard,
+			isGameOver: gameResult.gameOver,
+			isStartOver: false,
+		}));
+    }
+
 	newDeal() {
 		if(this.state.allCards.length > ((this.props.numberOfPlayers+1)*2))
 		{
 
 			var showFirstCard = false;
-			this.state.playerHand = [];
+			this.state.playerHands = [[]];
 			this.state.dealerHand = [];
 			var newRCount = 0
 
@@ -61,7 +129,7 @@ class Game extends React.Component {
 				var playerCardIndex = this.state.allCards[i];
 				var playerCardJSONObject = cardHelper.getCardJSONObject(allCardJSONData, playerCardIndex);
 
-				this.state.playerHand.push(playerCardJSONObject);
+				this.state.playerHands[0].push(playerCardJSONObject);
 				this.state.cardsDealt.push(playerCardJSONObject);
 
 				var dealerCardIndex = this.state.allCards[i+1];
@@ -79,7 +147,7 @@ class Game extends React.Component {
 			newRCount = newRCount + this.state.runningCount 
 			var newTCount = newRCount/((this.state.allCards.length-((this.props.numberOfPlayers+1)*2))/52)
 
-			var playerHandContents = cardHelper.getValueOfHand(this.state.playerHand)
+			var playerHandContents = cardHelper.getValueOfHand(this.state.playerHands[0])
 			var dealerHandContents = cardHelper.getValueOfHand(this.state.dealerHand)
 
 			var gameResult = cardHelper.evalutateInitialDeal(playerHandContents, dealerHandContents, this.state.wins.playerWins, this.state.wins.dealerWins, this.state.wins.ties)
@@ -97,7 +165,7 @@ class Game extends React.Component {
 
 	      	this.setState(state => ({
 	      		allCards: this.state.allCards,
-	        	playerHand: this.state.playerHand,
+	        	playerHands: this.state.playerHands,
 				dealerHand: this.state.dealerHand,
 	        	cardsDealt: this.state.cardsDealt,
 	        	runningCount: newRCount,
@@ -133,8 +201,8 @@ class Game extends React.Component {
 	   	//it's the player's turn
 	   	if(isPlayerTurn) 
 	   	{
-	   		this.state.playerHand.push(newDrawnCardJSONObject)
-	   		var playerHandContents = cardHelper.getValueOfHand(this.state.playerHand)
+	   		this.state.playerHands[0].push(newDrawnCardJSONObject)
+	   		var playerHandContents = cardHelper.getValueOfHand(this.state.playerHands[0])
 	   		gameResult = cardHelper.evaluateBust(isPlayerTurn, playerHandContents, this.state.wins.playerWins, this.state.wins.dealerWins, this.state.wins.ties)
 
 	   		if(gameResult.didBust) { 
@@ -152,14 +220,14 @@ class Game extends React.Component {
 	   		gameResult = cardHelper.evaluateBust(isPlayerTurn, dealerHandContents, this.state.wins.playerWins, this.state.wins.dealerWins, this.state.wins.ties)
 	   		
 	   		if(!gameResult.didBust) {
-	   			var playerHandContents = cardHelper.getValueOfHand(this.state.playerHand)
+	   			var playerHandContents = cardHelper.getValueOfHand(this.state.playerHands[0])
 	   			gameResult = cardHelper.evaluateWinner(this.props.hitOnSoft17, playerHandContents, dealerHandContents, this.state.wins.playerWins, this.state.wins.dealerWins, this.state.wins.ties)
 	   		}
 	   	}
 
 	   	this.setState(state => ({
 	  		allCards: this.state.allCards,
-	    	playerHand: this.state.playerHand,
+	    	playerHands: this.state.playerHands,
 			dealerHand: this.state.dealerHand,
 	    	cardsDealt: this.state.cardsDealt,
 	    	runningCount: newRCount,
@@ -186,8 +254,8 @@ class Game extends React.Component {
 
 	   	this.state.allCards.shift();
 
-	   	this.state.playerHand.push(newDrawnCardJSONObject)
-   		var playerHandContents = cardHelper.getValueOfHand(this.state.playerHand)
+	   	this.state.playerHands.push(newDrawnCardJSONObject)
+   		var playerHandContents = cardHelper.getValueOfHand(this.state.playerHands[0])
    		var gameResult = cardHelper.evaluateBust(true, playerHandContents, this.state.wins.playerWins, this.state.wins.dealerWins, this.state.wins.ties)
    		
    		if(!gameResult.didBust) {
@@ -197,7 +265,7 @@ class Game extends React.Component {
 
    		this.setState(state => ({
 	  		allCards: this.state.allCards,
-	    	playerHand: this.state.playerHand,
+	    	playerHands: this.state.playerHands,
 	    	cardsDealt: this.state.cardsDealt,
 	    	runningCount: newRCount,
 	    	trueCount: newTCount,
@@ -211,11 +279,11 @@ class Game extends React.Component {
 	    	showDealerFirstCard: true,
 	    	isGameOver: gameResult.gameOver
   		}));
-}
+	}
 
 	stayPlayer() {
 
-	   	var playerHandContents = cardHelper.getValueOfHand(this.state.playerHand)
+	   	var playerHandContents = cardHelper.getValueOfHand(this.state.playerHands[0])
 		var dealerHandConents = cardHelper.getValueOfHand(this.state.dealerHand)
 
 		var gameResult = cardHelper.evaluateWinner(this.props.hitOnSoft17, playerHandContents ,dealerHandConents, this.state.wins.playerWins, this.state.wins.dealerWins, this.state.wins.ties)
@@ -235,75 +303,6 @@ class Game extends React.Component {
 
 	}
 
-    dealShoe() {
-    	var newCardArray = cardHelper.getShoe(this.props.numberOfDecks)
-
-    	//var gameOver = false;
-		var playerCards = [];
-		var dealerCards = [];
-		var cardsDealtOut = [];
-		var rCount = 0;
-		var showFirstCard = false
-
-		for(let i = 0; i <= this.props.numberOfPlayers+1; i+=2)
-		{
-			var playerCardIndex = newCardArray[i];
-			var playerCardJSONObject = cardHelper.getCardJSONObject(allCardJSONData, playerCardIndex);
-
-			playerCards.push(playerCardJSONObject);
-			cardsDealtOut.push(playerCardJSONObject);
-
-			var dealerCardIndex = newCardArray[i+1];
-			var dealerCardJSONObject = cardHelper.getCardJSONObject(allCardJSONData, dealerCardIndex);
-
-			dealerCards.push(dealerCardJSONObject);
-			cardsDealtOut.push(dealerCardJSONObject);
-
-			if (i === 0) {
-				rCount += (cardHelper.getCardRunningCountValue(playerCardJSONObject))
-			} else {
-				rCount += (cardHelper.getCardRunningCountValue(playerCardJSONObject) + cardHelper.getCardRunningCountValue(dealerCardJSONObject))
-			}
-
-		}
-
-		var tCount = rCount/((newCardArray.length-cardsDealtOut.length)/52)
-		var playerHandContents = cardHelper.getValueOfHand(playerCards);
-		var dealerHandContents = cardHelper.getValueOfHand(dealerCards);
-
-		var gameResult = cardHelper.evalutateInitialDeal(playerHandContents, dealerHandContents, 0, 0, 0)
-
-		for(let i = 1; i <= ((this.props.numberOfPlayers+1)*2); i++) {
-			newCardArray.shift();
-		}
-
-		if(gameResult.gameWinner !== "")
-		{
-			showFirstCard = true;
-			rCount += cardHelper.getCardRunningCountValue(this.state.dealerHand[0])
-		}
-
-		this.setState(state => ({
-			allCards: newCardArray,
-			//cardJSON: cardJSONObject,
-			playerHand: playerCards,
-			dealerHand: dealerCards,
-			cardsDealt: cardsDealtOut,
-			runningCount: rCount,
-			trueCount: tCount,
-			winner: gameResult.gameWinner,
-			wins: {
-				"playerWins": gameResult.playerWins,
-				"dealerWins": gameResult.dealerWins,
-				"ties": gameResult.ties
-			},
-			playerTurn: true,
-			showDealerFirstCard: showFirstCard,
-			isGameOver: gameResult.gameOver,
-			isStartOver: false,
-		}));
-   		
-    }
 
 	render() {
 		return(
@@ -333,25 +332,32 @@ class Game extends React.Component {
 
 			<Row className="dividingLine"></Row>
 
-			<Hand cardArray={this.state.playerHand} showFirstCard={true} handName="Player"/>
+			{
+				this.state.playerHands.map(playerHandArray => (
 
-			<Row>
-				<Col>
-					<Button onClick={this.hit} variant="success" disabled={!this.state.playerTurn || this.state.isGameOver}>
-				 		Hit Player
-				 	</Button>
-				</Col>
-				<Col>
-					<Button onClick={this.doubleDown} variant="info" disabled={!this.state.playerTurn || this.state.isGameOver}>
-				 		Double Down
-				 	</Button>
-				</Col>
-				<Col>
-				 	<Button onClick={this.stayPlayer} disabled={!this.state.playerTurn || this.state.isGameOver} variant="warning">
-				 		Stay
-				 	</Button>
-				</Col>
-			</Row>
+					<>
+					<Hand cardArray={playerHandArray} showFirstCard={true} handName="Player"/>
+					
+					<Row>
+						<Col>
+							<Button onClick={this.hit} variant="success" disabled={!this.state.playerTurn || this.state.isGameOver}>
+						 		Hit Player
+						 	</Button>
+						</Col>
+						<Col>
+							<Button onClick={this.doubleDown} variant="info" disabled={!this.state.playerTurn || this.state.isGameOver}>
+						 		Double Down
+						 	</Button>
+						</Col>
+						<Col>
+						 	<Button onClick={this.stayPlayer} disabled={!this.state.playerTurn || this.state.isGameOver} variant="warning">
+						 		Stay
+						 	</Button>
+						</Col>
+					</Row>
+					</>
+				))
+			}
 
 			<GameInfo cardsLeft={this.state.allCards.length} 
         		runningCount={this.state.runningCount} trueCount={this.state.trueCount} winner={this.state.winner}
